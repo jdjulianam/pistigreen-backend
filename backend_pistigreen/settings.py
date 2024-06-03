@@ -10,7 +10,7 @@ env_parser = environ.Env()
 # Definir la ruta base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DJANGO_ENV = os.getenv('DJANGO_ENV', 'development')
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'production')
 
 # Leer el archivo .env adecuado
 if DJANGO_ENV == 'production':
