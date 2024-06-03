@@ -1,5 +1,9 @@
 {
     "version": 2,
+    
+      "env": {
+        "DJANGO_ENV": "production"
+      },
     "builds": [
       {
         "src": "backend_pistigreen/wsgi.py",
