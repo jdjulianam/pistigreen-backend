@@ -4,35 +4,41 @@ import environ
 import os
 
 # Inicializar la instancia de environ
-env = environ.Env()
+env_parser = environ.Env()
+
 
 # Definir la ruta base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'development')
+
 # Leer el archivo .env adecuado
-environ.Env.read_env(os.path.join(BASE_DIR, '.env.production'))
+if DJANGO_ENV == 'production':
+    environ.Env.read_env('.env.production')
+else:
+    environ.Env.read_env('.env.development')
+
 
 # Configurar las variables de entorno
-DEBUG = env.bool("DEBUG", default=False)
-SECRET_KEY = env("SECRET_KEY")
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
-CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS")
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
-WEBSITE_URL = env("WEBSITE_URL")
+DEBUG = env_parser.bool("DEBUG", default=False)
+SECRET_KEY = env_parser("SECRET_KEY")
+ALLOWED_HOSTS = env_parser.list("ALLOWED_HOSTS")
+CORS_ALLOWED_ORIGINS = env_parser.list("CORS_ALLOWED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = env_parser.list("CSRF_TRUSTED_ORIGINS")
+WEBSITE_URL = env_parser("WEBSITE_URL")
 
-EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_BACKEND = env_parser("EMAIL_BACKEND")
 if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
-    EMAIL_HOST = env("EMAIL_HOST")
-    EMAIL_PORT = env("EMAIL_PORT")
-    EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
-    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+    EMAIL_HOST = env_parser("EMAIL_HOST")
+    EMAIL_PORT = env_parser("EMAIL_PORT")
+    EMAIL_USE_TLS = env_parser.bool("EMAIL_USE_TLS", default=True)
+    EMAIL_HOST_USER = env_parser("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = env_parser("EMAIL_HOST_PASSWORD")
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Configuración de la base de datos
 DATABASES = {
-    'default': env.db()
+    'default': env_parser.db()
 }
 
 # Application definition
@@ -87,9 +93,9 @@ WSGI_APPLICATION = 'backend_pistigreen.wsgi.application'
 AUTH_USER_MODEL = 'account.User'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=env.int('ACCESS_TOKEN_LIFETIME', 30)),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=env.int('REFRESH_TOKEN_LIFETIME', 180)),
-    'ROTATE_REFRESH_TOKENS': env.bool('ROTATE_REFRESH_TOKENS', False),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=env_parser.int('ACCESS_TOKEN_LIFETIME', 30)),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=env_parser.int('REFRESH_TOKEN_LIFETIME', 180)),
+    'ROTATE_REFRESH_TOKENS': env_parser.bool('ROTATE_REFRESH_TOKENS', False),
 }
 
 REST_FRAMEWORK = {
@@ -133,9 +139,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuración específica de seguridad para producción
-SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', True)
-SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', True)
-CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', True)
-SECURE_BROWSER_XSS_FILTER = env.bool('SECURE_BROWSER_XSS_FILTER', True)
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool('SECURE_CONTENT_TYPE_NOSNIFF', True)
-X_FRAME_OPTIONS = env('X_FRAME_OPTIONS', 'DENY')
+if DJANGO_ENV == 'production':
+    SECURE_SSL_REDIRECT = env_parser.bool('SECURE_SSL_REDIRECT', True)
+    SESSION_COOKIE_SECURE = env_parser.bool('SESSION_COOKIE_SECURE', True)
+    CSRF_COOKIE_SECURE = env_parser.bool('CSRF_COOKIE_SECURE', True)
+    SECURE_BROWSER_XSS_FILTER = env_parser.bool('SECURE_BROWSER_XSS_FILTER', True)
+    SECURE_CONTENT_TYPE_NOSNIFF = env_parser.bool('SECURE_CONTENT_TYPE_NOSNIFF', True)
+    X_FRAME_OPTIONS = env_parser("X_FRAME_OPTIONS", default="DENY")
+
