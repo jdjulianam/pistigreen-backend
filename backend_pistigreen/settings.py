@@ -88,7 +88,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend_pistigreen.wsgi.app'
+WSGI_APPLICATION = 'backend_pistigreen.wsgi.application'
 
 AUTH_USER_MODEL = 'account.User'
 
