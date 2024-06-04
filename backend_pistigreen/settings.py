@@ -2,7 +2,7 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 import os
-
+import dj_database_url
 
 # Inicializar la instancia de environ
 env_parser = environ.Env()
@@ -39,9 +39,9 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
 
 
 # Configuración de la base de datos
-
+DATABASE_URL = os.getenv("DATABASE_URL")
 DATABASES = {
-    'default': env_parser.db()
+    'default': dj_database_url.parse(DATABASE_URL)
 }
 # Application definition
 
