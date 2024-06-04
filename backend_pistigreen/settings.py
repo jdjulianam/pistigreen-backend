@@ -7,8 +7,8 @@ import tempfile
 
 # Inicializar la instancia de environ
 env_parser = environ.Env()
-
-
+temp_db_dir = tempfile.gettempdir()
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(temp_db_dir, 'db.sqlite3')}")
 
 # Definir la ruta base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,11 +40,11 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
 
 
 # Configuración de la base de datos
-temp_db_dir = tempfile.gettempdir()
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(temp_db_dir, 'db.sqlite3')}")
+
 DATABASES = {
     'default': dj_database_url.parse(DATABASE_URL)
 }
+os.makedirs(temp_db_dir, exist_ok=True)
 # Application definition
 
 INSTALLED_APPS = [
