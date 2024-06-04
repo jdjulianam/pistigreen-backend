@@ -2,16 +2,17 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 import os
-import dj_database_url
+
 
 # Inicializar la instancia de environ
 env_parser = environ.Env()
 
 
+
 # Definir la ruta base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DJANGO_ENV = os.getenv('DJANGO_ENV', 'production')
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'development')
 
 # Leer el archivo .env adecuado
 if DJANGO_ENV == 'production':
@@ -38,10 +39,9 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
 
 
 # Configuración de la base de datos
-DATABASE_URL = os.getenv("DATABASE_URL")
+
 DATABASES = {
-    
-    'default': dj_database_url.parse(DATABASE_URL)
+    'default': env_parser.db()
 }
 # Application definition
 
