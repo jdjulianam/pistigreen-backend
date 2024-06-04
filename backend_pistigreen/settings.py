@@ -3,6 +3,7 @@ from pathlib import Path
 import environ
 import os
 import dj_database_url
+import tempfile
 
 # Inicializar la instancia de environ
 env_parser = environ.Env()
@@ -39,7 +40,8 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
 
 
 # Configuración de la base de datos
-DATABASE_URL = os.getenv("DATABASE_URL")
+temp_db_dir = tempfile.gettempdir()
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(temp_db_dir, 'db.sqlite3')}")
 DATABASES = {
     'default': dj_database_url.parse(DATABASE_URL)
 }
