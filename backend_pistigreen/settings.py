@@ -2,19 +2,15 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 import os
-import dj_database_url
-import tempfile
 
 # Inicializar la instancia de environ
 env_parser = environ.Env()
-# Establece el directorio temporal para la base de datos
-temp_db_dir = tempfile.gettempdir()
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(temp_db_dir, 'db.sqlite3')}")
+
 
 # Definir la ruta base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DJANGO_ENV = os.getenv('DJANGO_ENV', 'development')
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'production')
 
 # Leer el archivo .env adecuado
 if DJANGO_ENV == 'production':
@@ -42,11 +38,8 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
 
 # Configuración de la base de datos
 DATABASES = {
-    'default': dj_database_url.parse(DATABASE_URL)
+    'default': env_parser.db()
 }
-
-# Asegúrate de que la carpeta temporal tenga permisos de escritura
-os.makedirs(temp_db_dir, exist_ok=True)
 
 # Application definition
 
