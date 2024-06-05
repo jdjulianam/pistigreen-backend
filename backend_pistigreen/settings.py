@@ -41,10 +41,18 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
 
 # Configuración de la base de datos
 
-DATABASES = {
-    'default': dj_database_url.parse(DATABASE_URL)
-}
-os.makedirs(temp_db_dir, exist_ok=True)
+
+if DJANGO_ENV == 'production':
+    DATABASES = {
+        'default': dj_database_url.parse(env_parser("DATABASE_URL"))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 # Application definition
 
 INSTALLED_APPS = [
