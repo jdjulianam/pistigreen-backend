@@ -3,12 +3,11 @@ from pathlib import Path
 import environ
 import os
 import dj_database_url
-import tempfile
+from decouple import config
 
 # Inicializar la instancia de environ
 env_parser = environ.Env()
-temp_db_dir = tempfile.gettempdir()
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(temp_db_dir, 'db.sqlite3')}")
+
 
 # Definir la ruta base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,21 +37,15 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
     EMAIL_HOST_USER = env_parser("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = env_parser("EMAIL_HOST_PASSWORD")
 
-
-# Configuración de la base de datos
-
-
-if DJANGO_ENV == 'production':
-    DATABASES = {
-        'default': dj_database_url.parse(env_parser("DATABASE_URL"))
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
+
+DATABASES['default'] = dj_database_url.config()
+
 # Application definition
 
 INSTALLED_APPS = [
