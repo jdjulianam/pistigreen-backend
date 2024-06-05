@@ -1,25 +1,23 @@
 {
-    "version": 2,
-    
-      "env": {
-        "DJANGO_ENV": "production",
-        "POSTGRES_URL": "@postgres://default:YnEr8JDa9GqO@ep-flat-dust-a4aagufm-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
-      },
-    "builds": [
-      {
-        "src": "backend_pistigreen/wsgi.py",
-        "use": "@vercel/python",
-        "config": {
-          "maxLambdaSize": "15mb"
-        }
+  "version": 2,
+  "env": {
+    "DJANGO_ENV": "production",
+    "POSTGRES_URL": "postgres://default:YnEr8JDa9GqO@ep-flat-dust-a4aagufm-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+  },
+  "builds": [
+    {
+      "src": "backend_pistigreen/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb"
       }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "backend_pistigreen/wsgi.py"
-      }
-    ],
-    "buildCommand": "python manage.py migrate"
-  }
-  
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend_pistigreen/wsgi.py"
+    }
+  ],
+  "buildCommand": "pip install -r requirements.txt && python manage.py migrate"
+}

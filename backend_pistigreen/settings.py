@@ -47,9 +47,12 @@ if DJANGO_ENV == 'development':
         }
     }
 else:
-    DATABASES = {
-        'default': dj_database_url.parse(env_parser('POSTGRES_URL'))
+
+     DATABASE_URL = env_parser("POSTGRES_URL")
+     DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
+   
 
 # Application definition
 
