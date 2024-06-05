@@ -9,7 +9,9 @@ djangorestframework-simplejwt==5.3.1
 filelock==3.13.3
 pillow==10.3.0
 platformdirs==4.2.0
+psycopg2-binary==2.9.9
 PyJWT==2.8.0
+python-decouple==3.8
 setuptools==70.0.0
 sqlparse==0.4.4
 typing_extensions==4.12.1
