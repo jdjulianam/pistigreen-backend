@@ -20,6 +20,6 @@
         "dest": "backend_pistigreen/wsgi.py"
       }
     ],
-    "buildCommand": "python manage.py migrate && next build"
+    "buildCommand": "python manage.py migrate"
   }
   
