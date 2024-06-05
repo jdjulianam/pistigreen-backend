@@ -3,7 +3,7 @@ from pathlib import Path
 import environ
 import os
 import dj_database_url
-from decouple import config
+
 
 # Inicializar la instancia de environ
 env_parser = environ.Env()
