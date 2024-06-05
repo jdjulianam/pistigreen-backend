@@ -9,6 +9,7 @@ from decouple import config
 env_parser = environ.Env()
 
 
+
 # Definir la ruta base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,14 +38,18 @@ if EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend":
     EMAIL_HOST_USER = env_parser("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = env_parser("EMAIL_HOST_PASSWORD")
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
-DATABASES['default'] = dj_database_url.config()
+if DJANGO_ENV == 'development':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(env_parser('POSTGRES_URL'))
+    }
 
 # Application definition
 

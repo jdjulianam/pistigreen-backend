@@ -2,7 +2,13 @@
     "version": 2,
     
       "env": {
-        "DJANGO_ENV": "production"
+        "DJANGO_ENV": "production",
+        "DEBUG": "false",
+        "SECRET_KEY": "i9*fil&+ii+gy)-a!$=i7i^c=-+56-6sb=qz1yft!=w2xxe+hg",
+        "ALLOWED_HOSTS": "@.vercel.app",
+        "CORS_ALLOWED_ORIGINS": "@https://pistigreenfront.vercel.app",
+        "CSRF_TRUSTED_ORIGINS": "@https://pistigreenfront.vercel.app",
+        "POSTGRES_URL": "@postgres://default:YnEr8JDa9GqO@ep-flat-dust-a4aagufm-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
       },
     "builds": [
       {
@@ -18,6 +24,7 @@
         "src": "/(.*)",
         "dest": "backend_pistigreen/wsgi.py"
       }
-    ]
+    ],
+    "buildCommand": "python manage.py migrate && next build"
   }
   
